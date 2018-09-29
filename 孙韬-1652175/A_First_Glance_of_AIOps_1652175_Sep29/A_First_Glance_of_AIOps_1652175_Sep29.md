@@ -1,8 +1,5 @@
 # A First Glance of AIOps 
-
-Tao Sun (1652175)
-
-Sept.29 
+Sept.29 - Tao Sun (1652175)
 
 ## Data Description
 
