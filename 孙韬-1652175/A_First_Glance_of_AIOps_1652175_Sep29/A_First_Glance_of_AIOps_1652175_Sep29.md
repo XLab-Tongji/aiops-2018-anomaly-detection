@@ -12,7 +12,7 @@ AIOps provides a KPI dataset collected from a few of IT companies. It contains K
 
 Firstly, I have drawn 26 scatter plots for each category's first 5000 points (to make it clearier) respectively (Fig 1). Red point denotes the abnormal  KPI value, while gray means the normal. 
 
-![scatter](/Users/suntao/Documents/Working_AIOps/report/A_First_Glance_of_AIOps_1652175_Sep29/fig/scatter.png)
+![scatter](fig/scatter.png)
 
 We could find several interting things:
 
@@ -71,7 +71,7 @@ According to the solution, I extracted feature of 3 classes:
 
   Number of features   $N*(2 + 2 *2)=6N$  , here N is the number of different windows.
 
-![image-20180929180747362](/Users/suntao/Documents/Working_AIOps/report/A_First_Glance_of_AIOps_1652175_Sep29/fig/image-20180929180747362.png)
+![image-20180929180747362](fig/image-20180929180747362.png)
 
 The window length series  is set to [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 100]. Therefore, the total feature of each point is $6*15=90$. This is just a simple attempt of the solution, so all these feature enginering methods should be improved in the feature.
 
@@ -79,7 +79,7 @@ The window length series  is set to [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 
 
 A network is implemented based on the solution's proposed network. More detailed parameters are shown in the list below. For a simple experiment, I didn't spend too much time on turning hyper-parameters. I set the dropout rate to 50% and the initial learning rate to 0.01. An Adam optimizer is used to train this network.
 
-![image-20180929182911079](/Users/suntao/Documents/Working_AIOps/report/A_First_Glance_of_AIOps_1652175_Sep29/fig/image-20180929182911079.png)
+![image-20180929182911079](fig/image-20180929182911079.png)
 
 ```
 _________________________________________________________________
@@ -105,7 +105,7 @@ For the loss function, I try to use the normal cross-entropy loss at first. Howe
 
 The total loss $L$ is defined as:
 
-![image-20180929183717688](/Users/suntao/Documents/Working_AIOps/report/A_First_Glance_of_AIOps_1652175_Sep29/fig/image-20180929183717688.png)
+![image-20180929183717688](fig/image-20180929183717688.png)
 
 
 
