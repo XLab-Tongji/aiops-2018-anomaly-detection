@@ -5,7 +5,7 @@ Sept.29 - Tao Sun (1652175)
 
 ### AIOps Data
 
-AIOps provides a KPI dataset collected from a few of IT companies. It contains KPI time-serise records of 26 different categories, whose properties are of variant. Each data point has 4 attributes: timestamp, value, label (normal or abnormal) and its category. 
+AIOps provides a KPI dataset collected from a few IT companies. It contains KPI time-serise records of 26 different categories, whose properties are of variant. Each data point has 4 attributes: timestamp, value, label (normal or abnormal) and its category. 
 
 Firstly, I have drawn 26 scatter plots for each category's first 5000 points (to make it clearier) respectively (Fig 1). Red point denotes the abnormal  KPI value, while gray means the normal. 
 
@@ -21,7 +21,7 @@ We could find several interting things:
 
 A more quantitative result is shown in the table below. The abnormal ratio is small in many categories, such as 0.05% (Category. 7) and 0.10% (Category. 9). That means the provides data are strongly uneven, which we should overcome.
 
-|No. | Category | Total Points | Abnormal Points (ratio %) | Start Time | End Time | TIme Duration | Sample Freq |
+|No. | Category | Total Points | Abnormal Points (ratio %) | Start Time | End Time | TIme Duration | Sample Freq (point/day)|
 |:-- | :-: | :-: | :-: | :-: | :-: | :-:|:-: |
 | 0 | 02e99bd4f6cfb33f | 128562 | 10550 (8.21%)| 2017-04-30 16:00:00 | 2017-07-31 04:34:00 | 91 days  | 1412.77 |
 | 1 | 046ec29ddf80d62e | 8784 | 80  (0.91%) | 2016-07-24 16:00:00 | 2016-08-24 03:55:00 | 30 days  | 292.80 |
@@ -116,3 +116,7 @@ Only one category (category 12, which have a average amount of points) is used i
 | Validation  | 98.83     | 49.13  | 56.48     | 51.72    |
 
 From the result, we can see that my model can detect about 50% abnormal points. It F1 score on the validation set reaches 51.72%. But the perfoemance is still inferior to the champoin's. The feature engineering method and the model structure both need futher working.
+
+## Reference
+[1] Maxim Berman, Amal Rannen Triki, and Matthew B Blaschko. The Lovasz-Softmax loss: A tractable surrogate for the optimization of the intersection-over-union measure in neural networks. arXiv.org, May 2017.
+
