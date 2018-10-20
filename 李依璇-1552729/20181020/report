@@ -78,7 +78,7 @@ Time Series Feature extraction based on scalable hypothesis tests”（基于可
 
 <https://blog.csdn.net/takethevow/article/details/80171440> 关于该包如何使用
 
-[2] 以KPI第一类，以一小时为单位的划分样本，对其原来y加权平均，问题转化成60min内的是否会发生异常检测
+[2] 以KPI第一类，以一小时为单位的划分样本，对其原来y加权平均{减少了样本量}
 
 [3] 欠采样至1：1{此次取前连续0}
 
