@@ -1,0 +1,115 @@
+【1】论文总结
+
+1、运维系统智能化的一次探索工作
+
+数据：人工标注的业务数据 
+
+算法：多个基本时序分析[统计]{特征工程}+随机森林{模型}
+
+调参：最佳点，扫描参空
+
+结果：
+
+继续：
+
+2、Webscope S5 数据集上的在线异常检测 : 一个比较研究
+
+数据：人造benchmark。
+
+算法：SOARD
+
+调参：遗忘，阈值，观察序列 
+
+结果：
+
+继续：相对性比较。
+
+3、通用可扩展的自动化时间序列异常检测框架
+
+数据：
+
+算法：统计
+
+调参：
+
+结果：
+
+继续：
+
+ 
+
+ 
+
+【2】分享
+
+<https://github.com/linjinjin123/awesome-AIOps#tools-and-algorithms>
+
+AIOps学习资料汇总仓库
+
+白皮书：
+
+课程和资料：清华大学的智能运维2018课程
+
+开源工具和算法：打标，ad的例子，特征工程工具，一些论文，
+
+开源数据集：alibaba,azure,
+
+比较好的公众号推荐：
+
+ 
+
+<https://blog.csdn.net/u014203453/article/details/53013702>
+
+关于多元时序分析的概念
+
+ 
+
+ 
+
+【3】实践
+
+特征工程包：tsfresh
+
+Time Series Feature extraction based on scalable hypothesis tests”（基于可扩展假设检验的时间序列特征提取）
+
+[1] tsfresh包的特征抽取 并过滤冗余和无效特征: 
+
+<https://blog.csdn.net/qq_23144435/article/details/81100977?utm_source=blogxgwz0> 浅谈
+
+<https://blog.csdn.net/takethevow/article/details/80171440> 关于该包如何使用
+
+[2] 以KPI第一类，以一小时为单位的划分样本，对其原来y加权平均，问题转化成60min内的是否会发生异常检测
+
+[3] 欠采样至1：1{此次取前连续0}
+
+[4]网络结构
+
+输入层Dense (None,256) 激活'relu'
+
+隐藏层是一层Dense (None,256)，激活'relu'
+
+输出层是Dense(n,1) 激活'sigmoid',
+
+验证集上  accuracy: 0.4945
+
+ 
+
+ 
+
+【4】随记
+
+1、针对某一特定数据集{use-case}，讨论模型，以及做特征工程时考虑的key factor
+
+2、SOARD: 填充异常黑名单，还是replace
+
+ 
+
+ 
+
+【学】
+
+4、衡量标准
+
+【工】
+
+5、泛化，大规模
