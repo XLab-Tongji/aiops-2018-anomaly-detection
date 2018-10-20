@@ -10,15 +10,15 @@ In this paper, a relatively Simple Online Regression Anomaly Detector is propose
 
   - Offline Regression Anomaly Detection (Offline-RAD)
 
-    ![img](/Users/kirito/Documents/aiops-2018-anomaly-detection/%E9%99%88%E6%B3%BD%E5%BE%BD-1652763/fig/offline_rad.png )
+    ![img](fig/offline_rad.png )
 
   - Specification for e-quantile removement
 
-    ![img](/Users/kirito/Documents/aiops-2018-anomaly-detection/%E9%99%88%E6%B3%BD%E5%BE%BD-1652763/fig/e_method.png)
+    ![img](fig/e_method.png)
 
   - Online Regression Anomaly Detection(Online-RAD)
 
-  ![img](/Users/kirito/Documents/aiops-2018-anomaly-detection/%E9%99%88%E6%B3%BD%E5%BE%BD-1652763/fig/online_rad.png)
+  ![img](fig/online_rad.png)
 
 - Summary
 
