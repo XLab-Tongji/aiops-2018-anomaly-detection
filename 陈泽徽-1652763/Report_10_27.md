@@ -4,9 +4,7 @@
 
 An autoencoder model as well as a GAN have been implemented for experiments on this task.
 
->  Thus resampling at a lower but fixed rate compared
-> to the original data sequences will be a crucial part of preprocessing for detection of anomalies
-> in full cycles.
+>  Thus resampling at a lower but fixed rate compared to the original data sequences will be a crucial part of preprocessing for detection of anomalies in full cycles.
 
 ### Data Preprocessing and Feature Selection
 
@@ -20,8 +18,7 @@ An autoencoder model as well as a GAN have been implemented for experiments on t
 
 ### Architecture Selection
 
-> This makes it difficult to implement a binary classification
-> model detect anomalies. Hence, a more reasonable approach is the training of a predictive model exclusively on normal data.
+> This makes it difficult to implement a binary classification model detect anomalies. Hence, a more reasonable approach is the training of a predictive model exclusively on normal data.
 
 1. Autoencoder-based model
 
