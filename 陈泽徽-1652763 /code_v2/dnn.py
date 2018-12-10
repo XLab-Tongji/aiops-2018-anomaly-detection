@@ -118,7 +118,7 @@ class Data(object):
         self.train_X, self.test_X, self.train_y, self.test_y \
                     = train_test_split(X_ss, y, test_size=0.2)
 def get_data():
-    file_path = 'feature_data/%s.csv' % str(opts['api_id'])
+    file_path = 'feature_data/%s.csv' % str(opts['kpi_id'])
     raw_data = pd.read_csv(file_path)
     raw_data_arr = np.array(raw_data)
     X, y = raw_data_arr[:, :-1], raw_data_arr[:, -1]
@@ -126,15 +126,24 @@ def get_data():
     return data
 
 def oversampling(data):
-    sample_num = int(opts['ratio'] / data.anomaly_ratio)
-    anomaly_index = np.where(data.train_y==1)[0]
-    anomaly_points = data.train_X[anomaly_index]
-    for num in range(sample_num):
-        random_bias = np.random.normal(0, 0.1, anomaly_points.shape)
-        random_anomaly_points = anomaly_points + random_bias
-        anomaly_y = np.ones((anomaly_index.shape[0], ))
-        data.train_X = np.concatenate([data.train_X, random_anomaly_points], axis=0)
+    # vae for augmentation
+    if opts['augment_type'] == 'vae':
+        augment_data = pd.read_csv('vae_data/%s.csv' % str(opts['kpi_id']))
+        #augment_size = augment_data.shape[0]
+        data.train_X = np.concatenate([data.train_X, augment_data], axis=0)
+        anomaly_y = np.ones((augment_data.shape[0], ))
         data.train_y = np.concatenate([data.train_y, anomaly_y], axis=0)
+    # random noise for augmentation
+    else:
+        sample_num = int(opts['ratio'] / data.anomaly_ratio)
+        anomaly_index = np.where(data.train_y==1)[0]
+        anomaly_points = data.train_X[anomaly_index]
+        for num in range(sample_num):
+            random_bias = np.random.normal(0, 0.1, anomaly_points.shape)
+            random_anomaly_points = anomaly_points + random_bias
+            anomaly_y = np.ones((anomaly_index.shape[0], ))
+            data.train_X = np.concatenate([data.train_X, random_anomaly_points], axis=0)
+            data.train_y = np.concatenate([data.train_y, anomaly_y], axis=0)
         
 data = get_data()
 oversampling(data)
