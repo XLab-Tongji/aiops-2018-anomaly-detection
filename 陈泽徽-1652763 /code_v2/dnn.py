@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 os.environ['CUDA_VISIBLE_DEVICES'] = '2'
-
+import configs
 import sys
 
 num_2_kpi = {
@@ -45,10 +45,8 @@ else:
         print(str(key) + ': ' + value)
     kpi_id = input('input kpi type:')
 
-opts = {
-    'api_id': num_2_kpi[kpi_id],
-    'ratio': 0.7,
-}
+opts = configs.config_KPI
+opts['kpi_id'] = num_2_kpi[kpi_id]
 
 import keras.backend as K
 def FP(threshold = 0.5):
@@ -147,10 +145,10 @@ from keras.layers import Dense, Dropout
 from keras.callbacks import TensorBoard, ModelCheckpoint
 
 model = Sequential()
-model.add(Dense(256, input_dim=22, activation='relu'))
-model.add(Dropout(0.5))
-model.add(Dense(256, activation='relu'))
-model.add(Dropout(0.5))
+model.add(Dense(opts['num_units'], input_dim=opt['input_dim'], activation='relu'))
+model.add(Dropout(opts['dropout']))
+model.add(Dense(opts['num_units'], activation='relu'))
+model.add(Dropout(opts['dropout']))
 model.add(Dense(1, activation='sigmoid'))
 
 model.compile(loss='binary_crossentropy',
@@ -163,8 +161,8 @@ save_best = ModelCheckpoint(save_path, monitor='val_f1_score', save_best_only=Tr
 model.fit(data.train_X, data.train_y,
           validation_data=[data.test_X, data.test_y],
           callbacks=[save_best],
-          epochs=15,
-          batch_size=128,
+          epochs=opts['epoch_num'],
+          batch_size=opts['batch_size'],
           shuffle=True)
 
 #test_size = data.test_X.shape[0]
