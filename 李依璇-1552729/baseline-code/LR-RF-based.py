@@ -48,19 +48,12 @@ def buildModel(mdl):
     models={'lr':LogisticRegression(),
             'rf': RandomForestClassifier(n_estimators=10, max_features=int(math.sqrt(n_features)), max_depth=None, min_samples_split=2,
                               bootstrap=True)
-            #'svm': SVC(C=0.1,kernel='rbf',gamma=20,decision_function_type='ovo'),
-            #'oneclass-svm': OneClassSVM(nu=0.1, kernel="rbf", gamma='scale')
             }
     return models[mdl]
 
-def feature_preprocess():
-    pass
 
-def ocsvm():
-
-    pass
 M='rf'
-def lr_main():
+def main():
     kpi_id = num_2_kpi[1]
     data = pd.read_csv('../feature_data' + '/' + kpi_id + '.csv')
     for i in range(2, 27):
@@ -71,22 +64,17 @@ def lr_main():
     std = StandardScaler()
     x = data.drop(['14'], axis=1)
     y = data['14']
-    for i in x.columns:
-        x[i] = Series(list(std.fit_transform(np.array(x[i]).reshape(-1, 1))))
+    if M == 'lr':
+        x=std.fit_transform(x)
 
     sm = SMOTE(ratio=1,k_neighbors=2,random_state=42)
     x,y=sm.fit_resample(x,y)
 
-    #X_train, X_valid, y_train, y_valid = x[0:int(0.8 * x.shape[0])], x[int(0.8 * x.shape[0]) + 1:-1], y[0:int(
-        #0.8 * y.shape[0])], y[int(0.8 * y.shape[0]) + 1:-1]
+   
     X_train, X_valid, y_train, y_valid = model_selection.train_test_split(x, y, test_size=0.2, random_state=0)
     if 1.0 not in set(y_valid):
         print(set(y_valid))
         print('error')
-
-
-
-
 
 
 
@@ -101,12 +89,12 @@ def lr_main():
     false_negatives = cm[0, 1]
     accuracy = (true_negatives + true_positives) / (
                 (true_negatives + true_positives) + (false_negatives + false_positives))
-    positives = true_positives + false_positives
+    positives = true_positives + false_negatives
     precision = (true_positives + 1e-10) / (false_positives + true_positives + 1e-10)
     recall = (true_positives + 1e-10) / (positives + 1e-10)
     f1_score = 2 * precision * recall / (precision + recall)
     output_str = str('accuracy: %.4f, f1 score: %.4f, precision: %.4f, recall: %.4f' \
-                     % (kpi_id, accuracy, f1_score, precision, recall))
+                     % (accuracy, f1_score, precision, recall))
     output_csv = str('%.4f, %.4f, %.4f, %.4f' % (accuracy, f1_score, precision, recall))
     with open(M+'_result.txt', 'a') as f:
         f.write(output_str + '\n')
@@ -120,5 +108,5 @@ print(report[3])
 '''
 
 if __name__=='__main__':
-    lr_main()
+    main()
 
