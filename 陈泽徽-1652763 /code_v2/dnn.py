@@ -154,7 +154,7 @@ from keras.layers import Dense, Dropout
 from keras.callbacks import TensorBoard, ModelCheckpoint
 
 model = Sequential()
-model.add(Dense(opts['num_units'], input_dim=opt['input_dim'], activation='relu'))
+model.add(Dense(opts['num_units'], input_dim=opts['input_dim'], activation='relu'))
 model.add(Dropout(opts['dropout']))
 model.add(Dense(opts['num_units'], activation='relu'))
 model.add(Dropout(opts['dropout']))
