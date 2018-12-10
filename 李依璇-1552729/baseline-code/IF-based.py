@@ -47,15 +47,15 @@ num_2_kpi = {
 
 
 def over_sampling(X, y_):
-    sm = SMOTE(ratio=0.3, k_neighbors=2, random_state=42)
+    sm = SMOTE(ratio=0.5, k_neighbors=2, random_state=42)
     return sm.fit_resample(X, y_)
 
 
-def isolaion_forest(X_train,outlier_fraction, X_outliers, labels, model_id):
+def isolaion_forest(X_train, outlier_fraction, X_outliers, labels, model_id):
     outliers_fraction = outlier_fraction
 
     i_forest = IsolationForest(n_estimators=10, behaviour='new', contamination=outliers_fraction, max_features=19,
-                               random_state=42,max_samples=256)
+                               random_state=42, max_samples=256)
 
     start_time = time.time()
     i_forest.fit(X_train)
@@ -66,25 +66,30 @@ def isolaion_forest(X_train,outlier_fraction, X_outliers, labels, model_id):
     start_time = time.time()
 
     y_pred = i_forest.predict(X_outliers)
+
+    s = i_forest.decision_function(X_outliers)  # sklearn_score
+
+    for i in range(len(y_pred)):
+        if s[i] < -0.11:
+            y_pred[i] = 1
+        if s[i] > 0.075:
+            y_pred[i] = -1
+
     end_time = time.time()
     print('data predict time:', end_time - start_time)
 
     y_pred = np.subtract(labels.reshape(1, -1)[0], y_pred)
-
-    s = i_forest.decision_function(X_outliers) #sklearn_score
-
 
     fn_s_mean, fn_s_min, fn_s_max = np.mean(s[y_pred == 0]), np.min(s[y_pred == 0]), np.max(s[y_pred == 0])
     fp_s_mean, fp_s_min, fp_s_max = np.mean(s[y_pred == 1]), np.min(s[y_pred == 1]), np.max(s[y_pred == 1])
     tn_s_mean, tn_s_min, tn_s_max = np.mean(s[y_pred == -1]), np.min(s[y_pred == -1]), np.max(s[y_pred == -1])
     tp_s_mean, tp_s_min, tp_s_max = np.mean(s[y_pred == 2]), np.min(s[y_pred == 2]), np.max(s[y_pred == 2])
 
-
     false_negatives = len(y_pred[y_pred == 0])
     false_positives = len(y_pred[y_pred == 1])
     true_negatives = len(y_pred[y_pred == -1])
     true_positives = len(y_pred[y_pred == 2])
-
+  
     accuracy = (true_negatives + true_positives) / (
             (true_negatives + true_positives) + (false_negatives + false_positives))
     positives = true_positives + false_negatives
@@ -93,10 +98,10 @@ def isolaion_forest(X_train,outlier_fraction, X_outliers, labels, model_id):
     f1_score = 2 * precision * recall / (precision + recall)
     output_str = str('model id: %s, accuracy: %.4f, f1 score: %.4f, precision: %.4f, recall: %.4f' \
                      % (model_id, accuracy, f1_score, precision, recall))
-    output_csv = str('%s, %.4f, %.4f, %.4f, %.4f' % ('not all', accuracy, f1_score, precision, recall))
+    output_csv = str('%s, %.4f, %.4f, %.4f, %.4f' % ('all', accuracy, f1_score, precision, recall))
     output_score = str('%s, %.4f, %.4f, %.4f\n%s, %.4f, %.4f, %.4f\n%s, %.4f, %.4f, %.4f\n%s, %.4f, %.4f, %.4f\n' % (
-    'false_negatives', fn_s_mean, fn_s_min, fn_s_max, 'false_positives', fp_s_mean, fp_s_min, fp_s_max,
-    'true_negatives', tn_s_mean, tn_s_min, tn_s_max, 'true_positives', tp_s_mean, tp_s_min, tp_s_max))
+        'false_negatives', fn_s_mean, fn_s_min, fn_s_max, 'false_positives', fp_s_mean, fp_s_min, fp_s_max,
+        'true_negatives', tn_s_mean, tn_s_min, tn_s_max, 'true_positives', tp_s_mean, tp_s_min, tp_s_max))
     with open('if_result.txt', 'a') as f:
         f.write(output_str + '\n')
     with open('if_output.csv', 'a') as f:
@@ -105,56 +110,30 @@ def isolaion_forest(X_train,outlier_fraction, X_outliers, labels, model_id):
         f.write(output_score)
 
 
-def append_type_feature(features_df, type_num):
-    '''
-    :param features_df: with original features
-    :param type_num: kpi_num
-    :return: with 4 more statical features and 1 type feature
-    '''
-    features_df.insert(len(features_df.columns), str(len(features_df.columns)), type_num)
-    value_data = pd.read_csv('../anomaly-data/test.csv')
-    series = value_data[value_data['KPI ID'] == num_2_kpi[type_num]]['value']
-    temps = pd.DataFrame(series.values)
-    window = temps.rolling(50)
-    features_df = pd.concat([features_df, window.min(), window.mean(), window.max(), temps.shift(-1)], axis=1)
-    return features_df
-
-
 def isolaion_forest_main():
-    '''
-    :return:test_data
-    '''
-    kpi_id = num_2_kpi[1]
-    data = append_type_feature(pd.read_csv('../feature_data' + '/' + kpi_id + '.csv'), 1)
-    for i in range(2, 3):
-        kpi_id = num_2_kpi[i]
-        data = data.append(append_type_feature(pd.read_csv('../feature_data' + '/' + kpi_id + '.csv'), i),
-                           ignore_index=True)
 
     N_FEATURES = 19
-    data = data.fillna(0)
-    data=shuffle(data)
 
+    data = pd.read_csv('IF-based.csv')
 
-
+    data.drop(['0'], axis=1, inplace=True)
+    data = shuffle(data)
+    data.columns = [str(i) for i in range(20)]
 
     for i in range(1):
         x = data.drop(['14'], axis=1)
-        scaler = StandardScaler().fit(x)
-        x = scaler.transform(x)
 
         y = data['14']
-
-        x = np.array(x).reshape(-1, N_FEATURES)
+        print(set(y))
+        x = np.array(x).reshape([-1, N_FEATURES])
         y = np.array(y).reshape(-1, 1)
         X_train, X_valid, y_train, y_valid = model_selection.train_test_split(x, y, test_size=0.2, random_state=0)
         X_train, y_train = over_sampling(X_train, y_train)
 
-        outlier_fraction=len(y_train[y_train==1])/len(y_train)
+        outlier_fraction = len(y_train[y_train == 1]) / len(y_train)
 
-        isolaion_forest(X_train,outlier_fraction, X_valid, y_valid, str(i))
+        isolaion_forest(X_train, outlier_fraction, X_valid, y_valid, str(i))
 
 
 if __name__ == '__main__':
     isolaion_forest_main()
-
