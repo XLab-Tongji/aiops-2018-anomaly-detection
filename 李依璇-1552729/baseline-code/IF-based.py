@@ -142,7 +142,7 @@ def append_type_feature(features_df,type_num):
     :return: with 4 more statical features and 1 type feature
     '''
     features_df.insert(len(features_df.columns),str(len(features_df.columns)),type_num)
-    value_data=pd.read_csv('../anomaly-data/test.csv')
+    value_data=pd.read_csv('../anomaly-data/train.csv')
     series=value_data[value_data['KPI ID']==num_2_kpi[type_num]]['value']
     temps = pd.DataFrame(series.values)
     window = temps.expanding()
