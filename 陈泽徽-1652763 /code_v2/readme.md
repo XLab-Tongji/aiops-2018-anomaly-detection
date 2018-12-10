@@ -4,6 +4,7 @@
 
 1. make sure you've put train.csv in data/ directory
 2. run `python preprocessing.py` to generate multi-feature processed data
+3. run `python vae_script.py` to generate anomaly data using VAE
 3. run `python script.py` to test our model on all kpi dataset.
 
 ps. You can also run `python dnn.py num(1,2,3...)` to test our model on a specific kpi dataset.
