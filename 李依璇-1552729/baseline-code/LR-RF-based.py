@@ -45,41 +45,53 @@ num_2_kpi = {
 
 def buildModel(mdl):
     n_features=14
-    models={'lr':LogisticRegression(),
-            'rf': RandomForestClassifier(n_estimators=10, max_features=int(math.sqrt(n_features)), max_depth=None, min_samples_split=2,
+    models={'lr':LogisticRegression(class_weight='balanced',n_jobs=2,C=1.0,penalty='l2'),
+            'rf': RandomForestClassifier(n_estimators=15, max_features=int(math.sqrt(n_features)), max_depth=2*n_features, min_samples_split=2,
                               bootstrap=True)
+
             }
     return models[mdl]
 
+def over_sampling(X, y_):
+    sm = SMOTE(ratio=0.2, k_neighbors=2, random_state=42)
+    return sm.fit_resample(X, y_)
 
-M='rf'
+
+M='lr'
 def main():
-    kpi_id = num_2_kpi[1]
+    '''
+     kpi_id = num_2_kpi[1]
     data = pd.read_csv('../feature_data' + '/' + kpi_id + '.csv')
     for i in range(2, 27):
         kpi_id = num_2_kpi[i]
         data = data.append(pd.read_csv('../feature_data' + '/' + kpi_id + '.csv'), ignore_index=True)
+    '''
 
 
+    data=pd.read_csv('LR-RF-based.csv')
+    print('feature preprocessed...')
     std = StandardScaler()
     x = data.drop(['14'], axis=1)
     y = data['14']
     if M == 'lr':
         x=std.fit_transform(x)
 
-    sm = SMOTE(ratio=1,k_neighbors=2,random_state=42)
-    x,y=sm.fit_resample(x,y)
+    if M=='lr':
+        sm = SMOTE(ratio=1,k_neighbors=2,random_state=42)
+        x,y=sm.fit_resample(x,y)
 
-   
-    X_train, X_valid, y_train, y_valid = model_selection.train_test_split(x, y, test_size=0.2, random_state=0)
-    if 1.0 not in set(y_valid):
-        print(set(y_valid))
-        print('error')
+
+
+    X_train, X_valid, y_train, y_valid = model_selection.train_test_split(x, y, test_size=0.2, random_state=42)
+    if M=='rf':
+        X_train, y_train = over_sampling(X_train, y_train)
 
 
 
     clf = buildModel(M)
+
     clf.fit(X_train, y_train)
+    print('model built...')
     y_pred = clf.predict(X_valid)
     cm = confusion_matrix(y_valid, y_pred, [1, 0])
     print(cm)
@@ -101,11 +113,7 @@ def main():
     with open(M+'_output.csv', 'a') as f:
         f.write(output_csv + '\n')
 
-'''
-report=classification_report(y_valid, y_pred).splitlines(6)
-print(report[0])
-print(report[3])
-'''
+
 
 if __name__=='__main__':
     main()
