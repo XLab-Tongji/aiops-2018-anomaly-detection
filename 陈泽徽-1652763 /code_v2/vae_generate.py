@@ -63,7 +63,7 @@ trainData = pd.read_csv('feature_data/' + str(num_2_kpi[kpi_id]) + '.csv')
 
 # here is for feature engineering data process
 data = np.array(trainData)
-data = preprocessing.minmax_scale(data)
+#data = preprocessing.minmax_scale(data)
 
 trainX = np.array(data[...,:-1])
 trainY = np.array(data[..., -1])
@@ -135,20 +135,23 @@ def VAE_models(original_dim = 14, latent_dim = 2, intermediate_dim = 7):
     vae.compile(optimizer='adam', loss=vae_loss)
     return vae, encoder, decoder
 
-vae, encoder, decoder = VAE_models(22)
-vae.fit(x_anomaly_train, x_anomaly_train,
-        shuffle=True,
-        epochs=20,
-        batch_size=batch_size,
-        validation_data=(x_anomaly_valid, x_anomaly_valid))
+if x_anomaly_train.shape[0] == 0:
+    print("no anomaly points")
+else:
+    vae, encoder, decoder = VAE_models(22)
+    vae.fit(x_anomaly_train, x_anomaly_train,
+            shuffle=True,
+            epochs=20,
+            batch_size=batch_size,
+            validation_data=(x_anomaly_valid, x_anomaly_valid))
 
-if not os.path.exists('vae_data/'):
-	os.mkdir('vae_data')
+    if not os.path.exists('vae_data/'):
+        os.mkdir('vae_data')
 
-sample_points = np.random.normal(0, 1, (enlarge_data_size, 2))
-vae_generate_data = decoder.predict(sample_points)
-vae_generate_data_pd = pd.DataFrame(vae_generate_data)
-vae_generate_data_pd.to_csv('vae_data/' + str(num_2_kpi[kpi_id]) + '.csv', index=False)
+    sample_points = np.random.normal(0, 1, (enlarge_data_size, 2))
+    vae_generate_data = decoder.predict(sample_points)
+    vae_generate_data_pd = pd.DataFrame(vae_generate_data)
+    vae_generate_data_pd.to_csv('vae_data/' + str(num_2_kpi[kpi_id]) + '.csv', index=False)
 
 
 
