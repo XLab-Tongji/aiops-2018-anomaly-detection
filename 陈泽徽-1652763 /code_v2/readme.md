@@ -1,5 +1,14 @@
 # Readme
 
+## Environment
+- Python 3
+- pandas==0.23.4
+- numpy==1.14.5
+- scikit-learn==0.19.1
+- tensorflow==1.8.0
+- statsmodels==0.9.0
+- matplotlib==2.2.3
+
 ## Usage
 
 1. make sure you've put train.csv in data/ directory
