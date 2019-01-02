@@ -17,7 +17,7 @@
 2. run `pip install -r requirements.txt`
 3. run `python pre_data.py` to generate multi-feature processed data
 4. run `python vae_script.py` to generate anomaly data using VAE
-5. run `python script.py` to test our model on all kpi dataset, the record will generated automatically in file: `result.txt` and `output.csv`.
+5. run `python script.py` to test our model on all kpi dataset, our model performance will be recorded automatically in files: `result.txt` and `output.csv`.
 
 ps. You can also run `python dnn.py num(1,2,3...)` to test our model on a specific kpi dataset.
 
