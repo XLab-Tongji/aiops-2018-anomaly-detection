@@ -1,20 +1,23 @@
 # Readme
 
 ## Environment
-- Python 3
-- pandas==0.23.4
-- numpy==1.14.5
-- scikit-learn==0.19.1
-- tensorflow==1.8.0
-- statsmodels==0.9.0
-- matplotlib==2.2.3
+- make sure you are under a Python 3 environment.
+- package dependance
+	- pandas==0.23.4
+	- numpy==1.14.5
+	- scikit-learn==0.19.1
+	- tensorflow==1.8.0
+	- statsmodels==0.9.0
+	- matplotlib==2.2.3
+	- Keras==2.1.3
 
 ## Usage
 
 1. make sure you've put train.csv in data/ directory
-2. run `python pre_data.py` to generate multi-feature processed data
-3. run `python vae_script.py` to generate anomaly data using VAE
-3. run `python script.py` to test our model on all kpi dataset.
+2. run `pip install -r requirements.txt`
+3. run `python pre_data.py` to generate multi-feature processed data
+4. run `python vae_script.py` to generate anomaly data using VAE
+5. run `python script.py` to test our model on all kpi dataset, the record will generated automatically in file: `result.txt` and `output.csv`.
 
 ps. You can also run `python dnn.py num(1,2,3...)` to test our model on a specific kpi dataset.
 
